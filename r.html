@@ -380,15 +380,30 @@
     input.type = input.type === "password" ? "text" : "password";
   }
 
+  function normalizeDigits(str) {
+    const easternArabic = "٠١٢٣٤٥٦٧٨٩";
+    const persian = "۰۱۲۳۴۵۶۷۸۹";
+    return str.split("").map(ch => {
+      let idx = easternArabic.indexOf(ch);
+      if(idx !== -1) return String(idx);
+      idx = persian.indexOf(ch);
+      if(idx !== -1) return String(idx);
+      return ch;
+    }).join("");
+  }
+
   function checkPassword() {
     const input = document.getElementById("passwordInput");
     const error = document.getElementById("lockError");
 
-    if(input.value.trim() === CORRECT_PASSWORD) {
+    const cleaned = normalizeDigits(input.value.trim());
+    if(cleaned === CORRECT_PASSWORD) {
       document.getElementById("lockScreen").classList.remove("locked");
       document.getElementById("pageContent").classList.remove("content-hidden");
       localStorage.setItem("r_unlocked", "true");
     } else {
+      console.log("Password entered (length " + cleaned.length + "):", JSON.stringify(cleaned));
+      console.log("Expected (length " + CORRECT_PASSWORD.length + "):", JSON.stringify(CORRECT_PASSWORD));
       error.style.display = "block";
       input.value = "";
       setTimeout(() => { error.style.display = "none"; }, 2000);
