@@ -270,7 +270,10 @@
     <div class="lock-icon">🔐</div>
     <h2>هذه الصفحة محمية</h2>
     <p>أدخل الرمز السري للدخول</p>
-    <input type="password" id="passwordInput" placeholder="اكتب الرمز" />
+    <div style="position:relative;">
+      <input type="password" id="passwordInput" placeholder="اكتب الرمز" style="padding-left:44px;" />
+      <button type="button" onclick="togglePasswordVisibility()" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;padding:0;" title="إظهار/إخفاء الرمز">👁️</button>
+    </div>
     <button class="lock-btn" onclick="checkPassword()">فتح</button>
     <div class="lock-error" id="lockError">الرمز غير صحيح!</div>
   </div>
@@ -372,11 +375,16 @@
 <script>
   const CORRECT_PASSWORD = "VIva1122001@1122";
 
+  function togglePasswordVisibility() {
+    const input = document.getElementById("passwordInput");
+    input.type = input.type === "password" ? "text" : "password";
+  }
+
   function checkPassword() {
     const input = document.getElementById("passwordInput");
     const error = document.getElementById("lockError");
-    
-    if(input.value === CORRECT_PASSWORD) {
+
+    if(input.value.trim() === CORRECT_PASSWORD) {
       document.getElementById("lockScreen").classList.remove("locked");
       document.getElementById("pageContent").classList.remove("content-hidden");
       localStorage.setItem("r_unlocked", "true");
