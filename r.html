@@ -475,8 +475,6 @@
       document.getElementById("pageContent").classList.remove("content-hidden");
       sessionStorage.setItem("r_unlocked", "true");
     } else {
-      console.log("Password entered (length " + cleaned.length + "):", JSON.stringify(cleaned));
-      console.log("Expected (length " + CORRECT_PASSWORD.length + "):", JSON.stringify(CORRECT_PASSWORD));
       error.style.display = "block";
       input.value = "";
       setTimeout(() => { error.style.display = "none"; }, 2000);
