@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content=noindex><title>رسائل</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel=stylesheet><link rel=stylesheet href=sys.css></head><body><main id=app></main><script src=sys.js></script><script>
+LP.ready((data,save)=>{
+const {ymd,ar,$,esc}=LP;data.letters=data.letters||[];
+function view(){const t=ymd(new Date()),L=data.letters.map((l,i)=>({...l,i})).sort((a,b)=>a.open.localeCompare(b.open));
+$('#app').innerHTML=`<div class=hero><h1>✉️ رسائل لنفسي</h1><p>اكتب رسالة دلوقتي، وهتتخبّى لحد التاريخ اللي تختاره.</p></div>
+<div class=card><label class=m>عنوان الرسالة</label><input id=lt><label class=m>تتفتح في</label><input type=date id=ld min=${t}><label class=m>الرسالة</label><textarea id=lb style="min-height:160px" placeholder="يا أحمد، لما تقرأ الرسالة دي تكون…"></textarea><p><button class=btn id=sv>🔒 اقفل الرسالة</button></p><small>الرسالة بتتخبّى من الشاشة لحد التاريخ، ومحفوظة مشفّرة مع باقي بياناتك.</small></div>
+${L.map(l=>{const op=l.open<=t,k=Math.ceil((new Date(l.open+'T00:00:00')-new Date(t+'T00:00:00'))/864e5);return `<div class=card><div class=row><h3 style="flex:1">${op?'💌':'🔒'} ${esc(l.title||'رسالة')}</h3><button class="btn g" data-x=${l.i}>✕</button></div><small>اتكتبت ${l.on}، وتتفتح ${l.open}</small>${op?`<p style="white-space:pre-wrap">${esc(l.body)}</p>`:`<p class=m>⏳ فاضل ${ar(k)} يوم على فتحها.</p>`}</div>`}).join('')||'<p class=m>لسه ما كتبتش رسائل.</p>'}`;
+$('#sv').onclick=()=>{const b=$('#lb').value.trim(),d=$('#ld').value;if(!b||!d||d<=t)return alert('اكتب الرسالة واختار تاريخ بعد النهارده');data.letters.push({title:$('#lt').value.trim(),body:b,open:d,on:t});save();view()};
+document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{if(confirm('حذف الرسالة نهائيًا؟')){data.letters.splice(b.dataset.x,1);save();view()}})}
+view()});
+</script></body></html>

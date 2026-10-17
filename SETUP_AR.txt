@@ -1,0 +1,25 @@
+إعداد Firebase (مرة واحدة)
+1) console.firebase.google.com > Add project > سمّيه Ahmed Plan > اقفل Google Analytics > Create.
+2) Build > Authentication > Get started > Sign-in method > Email/Password > Enable > Save.
+3) Authentication > Users > Add user: اكتب إيميلك وباسورد جديد وقوي (١٢ حرف على الأقل ومستخدمتوش قبل كده).
+4) Authentication > Settings > Authorized domains > Add domain: nativemind11.github.io
+   (واختياري: User actions > شيل علامة Enable create sign-up لو موجودة).
+5) Build > Firestore Database > Create database > Production mode > اختار أقرب منطقة > Enable.
+6) Firestore > Rules، امسح اللي موجود والصق ده واضغط Publish:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.email == 'ahmedtaha.11887@gmail.com';
+    }
+  }
+}
+
+7) Project settings (الترس) > Your apps > أيقونة </> > سمّيه web > Register app > انسخ القيم اللي في firebaseConfig.
+   افتح ملف site/firebase-config.js وحطها مكان الفاضي (apiKey وauthDomain وprojectId وappId وغيرهم).
+8) في الريبو على GitHub امسح كل الملفات القديمة، وارفع محتوى فولدر site (الملفات اللي جواه، مش الفولدر نفسه).
+9) افتح الموقع، سجّل دخولك، وبعدين افتح import.html وارفع الـ٨ ملفات اللي في فولدر private_pages.
+   بعد كده متترفعش private_pages على GitHub أبدًا.
