@@ -39,3 +39,4 @@ canvas{width:100%;touch-action:none;background:var(--c2);border-radius:10px;bord
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.tabs .on{background:var(--a);color:#07201c}
 small,.m{color:var(--m)}img{max-width:100%}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.nr{display:flex;gap:10px;align-items:flex-start;margin:6px 0}.nr b{min-width:28px;height:28px;margin-top:7px;border-radius:50%;background:var(--a);color:#07201c;display:grid;place-items:center;font-size:14px}.nr textarea{min-height:42px;height:42px;resize:none;overflow:hidden;flex:1}
