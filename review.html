@@ -11,13 +11,13 @@ const past=Object.keys(data.rev).filter(x=>x.startsWith(tab+':')&&x!==k&&(data.r
 $('#app').innerHTML=`<div class=hero><h1>📊 تقييم الأداء ${T[tab]}</h1><p>الفترة: ${id}</p><div class=stats><span>📅 ${ar(ds.length)} يوم متسجّل</span><span>✅ متوسط إنجاز الأهداف: ${ar(Math.round(avg(pc)*100))}٪</span><span>😊 متوسط المزاج: ${mo.length?ar(avg(mo).toFixed(1)):'—'} من ٥</span></div></div>
 <div class=tabs>${Object.keys(T).map(t=>`<button class="btn g ${t==tab?'on':''}" data-t=${t}>${T[t]}</button>`).join('')}<input type=date id=dp value=${date} style="width:auto"></div>
 <div class=card><h3>تقييمي من ١٠: <b id=sv>${ar(R.s)}</b></h3><input type=range min=1 max=10 id=sc value=${R.s}>
-<h3>🏆 إيه اللي نجحت فيه؟</h3><textarea data-k=w>${R.w}</textarea><h3>⚠️ إيه اللي قصّرت فيه؟</h3><textarea data-k=m>${R.m}</textarea><h3>💡 اتعلمت إيه؟</h3><textarea data-k=l>${R.l}</textarea><h3>🎯 تركيزي الجاي</h3><textarea data-k=f>${R.f}</textarea></div>
-${past.length?`<div class=card><h3>🕘 تقييمات سابقة</h3>${past.map(x=>`<div class=item><b>${x.split(':')[1]}</b><span>${ar(data.rev[x].s)}/١٠ — ${(data.rev[x].l||data.rev[x].w||data.rev[x].f).slice(0,90)}</span></div>`).join('')}</div>`:''}
+<h3>🏆 إيه اللي نجحت فيه؟</h3><textarea data-k=w>${LP.esc(R.w)}</textarea><h3>⚠️ إيه اللي قصّرت فيه؟</h3><textarea data-k=m>${LP.esc(R.m)}</textarea><h3>💡 اتعلمت إيه؟</h3><textarea data-k=l>${LP.esc(R.l)}</textarea><h3>🎯 تركيزي الجاي</h3><textarea data-k=f>${LP.esc(R.f)}</textarea></div>
+${past.length?`<div class=card><h3>🕘 تقييمات سابقة</h3>${past.map(x=>`<div class=item><b>${x.split(':')[1]}</b><span>${ar(data.rev[x].s)}/١٠ — ${LP.esc((data.rev[x].l||data.rev[x].w||data.rev[x].f).slice(0,90))}</span></div>`).join('')}</div>`:''}
 <div class=card><h3>📝 سجل التغييرات في حياتي</h3><p class=m>أي قرار أو تغيير كبير عملته، اكتبه بتاريخه.</p><div class=row><input id=lg placeholder="مثلًا: بدأت أصحى ٦ الصبح" style="flex:1"><button class=btn id=al>إضافة</button></div><div id=ll></div></div>`;
 document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=b.dataset.t;view()});$('#dp').onchange=e=>{if(e.target.value){date=e.target.value;view()}};
 $('#sc').oninput=e=>{R.s=+e.target.value;$('#sv').textContent=ar(R.s);save()};
 document.querySelectorAll('[data-k]').forEach(t=>t.oninput=()=>{R[t.dataset.k]=t.value;save()});
-const ll=()=>{$('#ll').innerHTML=data.log.map((l,i)=>`<div class=item><small>${l.d}</small><span>${l.t}</span><button class="btn g" data-x=${i}>✕</button></div>`).join('')};ll();
+const ll=()=>{$('#ll').innerHTML=data.log.map((l,i)=>`<div class=item><small>${l.d}</small><span>${LP.esc(l.t)}</span><button class="btn g" data-x=${i}>✕</button></div>`).join('')};ll();
 $('#al').onclick=()=>{const v=$('#lg').value.trim();if(v){data.log.unshift({d:ymd(new Date()),t:v});$('#lg').value='';save();ll()}};
 $('#ll').onclick=e=>{const x=e.target.dataset.x;if(x!==undefined&&confirm('حذف؟')){data.log.splice(x,1);save();ll()}}}
 view()});

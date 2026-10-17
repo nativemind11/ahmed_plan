@@ -1,15 +1,15 @@
 <!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content=noindex><title>الرؤية</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel=stylesheet><link rel=stylesheet href=sys.css></head><body><main id=app></main><script src=sys.js></script><script>
 LP.ready((data,save)=>{
 const {ar,$}=LP;data.vision=data.vision||'';data.yg=data.yg||{};
-let h=`<div class=hero><h1>🔭 أنا في ٢٠٣٠</h1><p>⏳ فاضل ${ar(LP.daysTo())} يوم. اكتب رؤيتك كأنها حصلت.</p></div><div class=card><textarea id=vs style="min-height:180px" placeholder="أنا في ديسمبر ٢٠٣٠ بقيت… عندي… عايش في… بعمل…">${data.vision}</textarea></div><h2>🎯 أهداف كل سنة</h2><div class=grid>`;
+let h=`<div class=hero><h1>🔭 أنا في ٢٠٣٠</h1><p>⏳ فاضل ${ar(LP.daysTo())} يوم. اكتب رؤيتك كأنها حصلت.</p></div><div class=card><textarea id=vs style="min-height:180px" placeholder="أنا في ديسمبر ٢٠٣٠ بقيت… عندي… عايش في… بعمل…">${LP.esc(data.vision)}</textarea></div><h2>🎯 أهداف كل سنة</h2><div class=grid>`;
 for(let y=2026;y<=2030;y++)h+=`<div class=card><h3>${ar(y)}</h3><div id=y${y}></div><div class=row><input id=n${y} placeholder="هدف جديد"><button class=btn data-y=${y}>إضافة</button></div></div>`;
 h+=`</div><h2>🖼 لوحة الرؤية</h2><div class=card><input type=file id=fi accept="image/*" multiple><div class=vb id=vb style="margin-top:10px"></div></div>`;
 $('#app').innerHTML=h;$('#vs').oninput=e=>{data.vision=e.target.value;save()};
-function rl(y){const a=data.yg[y]=data.yg[y]||[];$('#y'+y).innerHTML=a.map((g,i)=>`<div class="item ${g.d?'d':''}"><input type=checkbox data-i=${i} ${g.d?'checked':''}><span>${g.t}</span><button class="btn g" data-x=${i}>✕</button></div>`).join('')||'<small>لسه مفيش أهداف</small>';
+function rl(y){const a=data.yg[y]=data.yg[y]||[];$('#y'+y).innerHTML=a.map((g,i)=>`<div class="item ${g.d?'d':''}"><input type=checkbox data-i=${i} ${g.d?'checked':''}><span>${LP.esc(g.t)}</span><button class="btn g" data-x=${i}>✕</button></div>`).join('')||'<small>لسه مفيش أهداف</small>';
 $('#y'+y).onchange=e=>{a[e.target.dataset.i].d=e.target.checked;save();rl(y)};$('#y'+y).onclick=e=>{const x=e.target.dataset.x;if(x!==undefined){a.splice(x,1);save();rl(y)}}}
 for(let y=2026;y<=2030;y++)rl(y);
 document.querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{const y=b.dataset.y,v=$('#n'+y).value.trim();if(v){(data.yg[y]=data.yg[y]||[]).push({t:v});$('#n'+y).value='';save();rl(y)}});
 async function vb(){const ks=await LP.files.keys('vb-');$('#vb').innerHTML='';for(const k of ks){const d=document.createElement('div');d.innerHTML=`<img src="${URL.createObjectURL(await LP.files.get(k))}"><button class="btn g" style="width:100%">✕</button>`;d.querySelector('button').onclick=async()=>{await LP.files.del(k);vb()};$('#vb').append(d)}}
-$('#fi').onchange=async e=>{for(const f of e.target.files){const im=await createImageBitmap(f),s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);await LP.files.put('vb-'+Date.now()+Math.random(),await new Promise(r=>c.toBlob(r,'image/jpeg',.8)))}e.target.value='';vb()};
+$('#fi').onchange=async e=>{for(const f of e.target.files){const im=await createImageBitmap(f),s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);await LP.files.put('vb-'+Date.now()+Math.random(),await new Promise(r=>c.toBlob(r,'image/jpeg',.7)))}e.target.value='';vb()};
 vb()});
 </script></body></html>

@@ -1,0 +1,1 @@
+window.FIREBASE_CONFIG={apiKey:"AIzaSyCPzVUeSdgZSmew8ptiL6AgfgCKyAX5Gtc",authDomain:"ahmed-plan-eaca6.firebaseapp.com",projectId:"ahmed-plan-eaca6",storageBucket:"ahmed-plan-eaca6.firebasestorage.app",messagingSenderId:"1013059101740",appId:"1:1013059101740:web:5a3d0b273072297accdd89"};
