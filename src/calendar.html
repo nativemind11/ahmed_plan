@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content=noindex><title>التقويم</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel=stylesheet><link rel=stylesheet href=sys.css></head><body><main id=app></main><script src=sys.js></script><script>
+LP.ready((data,save)=>{
+const {ar,age,pad,$}=LP,mn=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],now=new Date();
+data.months=data.months||{};data.days=data.days||{};
+let h='<div class=hero><h1>🗓 رحلتي لحد ٢٠٣٠</h1><p>كل شهر وقصاده سني. اكتب هدف الشهر، وافتح تقييمه في آخره.</p></div>';
+for(let y=2026;y<=2030;y++){h+=`<h2>${ar(y)}</h2><div class=grid>`;
+for(let m=y==2026?9:0;m<12;m++){const id=y+'-'+pad(m+1),n=Object.entries(data.days).filter(([k,d])=>k.startsWith(id)&&Object.values(d.g||{}).some(Boolean)).length,cur=now.getFullYear()==y&&now.getMonth()==m;
+h+=`<div class="card ${cur?'cur':''}"><h3>${mn[m]} ${cur?'📍':''}</h3><p class=m>🎂 سني: ${age(y,m)}${m==11?`<br>🎉 عيد ميلادك ${ar(y-2001)}`:''}</p><textarea data-id=${id} placeholder="هدف الشهر…">${LP.esc(data.months[id]||'')}</textarea><div class=row><small>✅ ${ar(n)} يوم فيه إنجاز</small><a class="btn g" href="review.html?t=month&d=${id}-01">تقييم الشهر</a></div></div>`}
+h+='</div>'}
+$('#app').innerHTML=h;
+document.querySelectorAll('[data-id]').forEach(t=>t.oninput=()=>{data.months[t.dataset.id]=t.value;save()})});
+</script></body></html>

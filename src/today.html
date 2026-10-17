@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang=ar dir=rtl><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content=noindex><title>اليوم</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel=stylesheet><link rel=stylesheet href=sys.css></head><body><main id=app></main><script src=sys.js></script><script>
+LP.ready((data,save)=>{
+const {ymd,ar,age,$,Q}=LP;let date=ymd(new Date());
+data.days=data.days||{};
+data.tpl=data.tpl||['🕌 الصلاة في وقتها','💪 رياضة','📚 ساعتين تعلّم','💼 شغل مركّز على مشاريعي','📖 قراءة ٢٠ دقيقة','😴 نوم بدري'].map((t,i)=>({id:'d'+i,t}));
+const pct=ds=>{const d=data.days[ds];return d&&data.tpl.length?data.tpl.filter(g=>d.g[g.id]).length/data.tpl.length:0};
+async function view(){
+const D=data.days[date]=data.days[date]||{g:{},top:['','',''],mood:0};
+const dt=new Date(date+'T00:00:00'),p=Math.round(pct(date)*100);
+let st=0,c=new Date();if(pct(ymd(c))<.6)c.setDate(c.getDate()-1);while(pct(ymd(c))>=.6){st++;c.setDate(c.getDate()-1)}
+const ks=Object.keys(data.days).sort();let best=0,run=0,prev=null;for(const k of ks){if(pct(k)>=.6){run=prev&&(new Date(k)-new Date(prev))/864e5==1?run+1:1;best=Math.max(best,run);prev=k}else{prev=null;run=0}}
+const bd=[[7,'🥉','أسبوع التزام'],[30,'🥈','شهر التزام'],[100,'🥇','١٠٠ يوم التزام']],now=new Date(),dl=(data.money||[]).filter(g=>g.d&&g.t>0).map(g=>({n:g.n,k:Math.ceil((new Date(g.d+'-01')-now)/864e5)})).sort((a,b)=>a.k-b.k);
+const extra=`<div class=grid><div class=card><h3>🏅 شاراتي</h3><div class=row>${bd.map(([n,e,t])=>`<span class=badge style="opacity:${best>=n?1:.3}">${e} ${t}</span>`).join('')}</div><small>أطول التزام ليك: ${ar(best)} يوم (اليوم الملتزم يعني ٦٠٪ من أهدافك أو أكتر)</small></div><div class=card><h3>⏳ أحلامي</h3>${dl.length?dl.map(g=>`<div class=item><span>${LP.esc(g.n)}</span><small>${g.k>0?'فاضل '+ar(g.k)+' يوم':'الموعد جه'}</small></div>`).join(''):'<small>حدّد موعد لكل هدف في صفحة الفلوس وهيظهر هنا.</small>'}</div></div><div class=card id=ph style="display:none"></div>`;
+$('#app').innerHTML=`<div class=hero><h1>🌅 ${dt.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</h1><p>${Q[Math.floor(dt/864e5)%Q.length]}</p><div class=stats><span>🎂 سني: ${age(dt.getFullYear(),dt.getMonth())}</span><span>🔥 ${ar(st)} يوم التزام</span><span>⏳ ${ar(LP.daysTo())} يوم على نهاية ٢٠٣٠</span><span>✅ ${ar(p)}٪ من أهداف اليوم</span></div></div>
+<div class="card row"><button class="btn g" id=pv>‹ يوم قبل</button><input type=date id=dp value=${date} style="width:auto"><button class="btn g" id=nx>يوم بعد ›</button><button class=btn id=td>اليوم</button></div>
+<div class=grid><div class=card><h3>🎯 أهداف اليوم</h3><div id=gl></div><div class=row style="margin-top:8px"><input id=ng placeholder="هدف يومي جديد (بيتضاف كل يوم)"><button class=btn id=ag>إضافة</button></div></div>
+<div class=card><h3>⭐ أهم ٣ حاجات النهارده</h3>${[0,1,2].map(i=>`<input data-t=${i} value="${LP.esc(D.top[i]||'')}" placeholder="الأولوية ${ar(i+1)}" style="margin:4px 0">`).join('')}<h3>😊 مزاجي</h3><div class=mood>${['😞','😕','😐','🙂','🤩'].map((e,i)=>`<button data-m=${i+1} class="${D.mood==i+1?'on':''}">${e}</button>`).join('')}</div><h3>📚 كورس أو موضوع</h3><input data-k=course value="${LP.esc(D.course||'')}" placeholder="اسم الكورس لو بتذاكر (اختياري)"></div></div>
+${extra}<div class=card><h3>📝 ملاحظات اليوم</h3><div class=row style="margin-bottom:8px"><button class="btn g" data-c="hiliteColor:#f0c98788">🖍 أصفر</button><button class="btn g" data-c="hiliteColor:#5fd0c066">🖍 أخضر</button><button class="btn g" data-c="bold">B</button><button class="btn g" data-c="foreColor:#f0c987">✒️ لون القلم</button><button class="btn g" data-c="removeFormat">⌫ مسح التنسيق</button></div><div class=ed id=ed contenteditable></div></div>
+<div class=card><h3>✏️ رسم وقلم</h3><div class=row style="margin-bottom:8px">${['#ffffff','#5fd0c0','#f0c987','#f87171','#a78bfa'].map(x=>`<button class="btn g" data-p="${x}" style="color:${x}">●</button>`).join('')}<button class="btn g" data-p=er>🧽 ممحاة</button><button class="btn g" id=cl>🗑 مسح الرسم</button></div><canvas id=cv width=1000 height=420></canvas></div>
+<div class=card><h3>🎙 تسجيل صوتي</h3><button class=btn id=rec>🎙 ابدأ تسجيل</button><div id=rl></div></div>
+<div class=grid><div class=card><h3>🙏 الحمد لله على</h3><textarea data-k=grat placeholder="٣ حاجات ممتن ليها النهارده">${LP.esc(D.grat||'')}</textarea></div><div class=card><h3>🌙 خطة بكرة</h3><textarea data-k=next placeholder="أول حاجة هعملها بكرة">${LP.esc(D.next||'')}</textarea></div></div>`;
+LP.files.keys('vb-').then(async ks=>{if(ks.length){const b=await LP.files.get(ks[Math.floor(Math.random()*ks.length)]);$('#ph').style.display='block';$('#ph').innerHTML=`<img src="${URL.createObjectURL(b)}" style="border-radius:12px;width:100%;max-height:320px;object-fit:cover"><small>📸 من لوحة رؤيتك</small>`}});
+const gl=$('#gl');gl.innerHTML=data.tpl.map(g=>`<div class="item ${D.g[g.id]?'d':''}"><input type=checkbox data-g=${g.id} ${D.g[g.id]?'checked':''}><span>${LP.esc(g.t)}</span><button class="btn g" data-x=${g.id}>✕</button></div>`).join('');
+gl.onchange=e=>{D.g[e.target.dataset.g]=e.target.checked;save();view()};
+gl.onclick=e=>{const x=e.target.dataset.x;if(x&&confirm('حذف الهدف من القائمة اليومية؟')){data.tpl=data.tpl.filter(g=>g.id!==x);save();view()}};
+$('#ag').onclick=()=>{const v=$('#ng').value.trim();if(v){data.tpl.push({id:'c'+Date.now(),t:v});save();view()}};
+const go=n=>{const d=new Date(date+'T00:00:00');d.setDate(d.getDate()+n);date=ymd(d);view()};
+$('#pv').onclick=()=>go(-1);$('#nx').onclick=()=>go(1);$('#td').onclick=()=>{date=ymd(new Date());view()};$('#dp').onchange=e=>{if(e.target.value){date=e.target.value;view()}};
+document.querySelectorAll('[data-t]').forEach(i=>i.oninput=()=>{D.top[i.dataset.t]=i.value;save()});
+document.querySelectorAll('[data-k]').forEach(i=>i.oninput=()=>{D[i.dataset.k]=i.value;save()});
+document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{D.mood=+b.dataset.m;save();view()});
+const ed=$('#ed');ed.innerHTML=D.note||'';ed.oninput=()=>{D.note=ed.innerHTML;save()};
+document.querySelectorAll('[data-c]').forEach(b=>{b.onmousedown=e=>e.preventDefault();b.onclick=()=>{const[c,v]=b.dataset.c.split(':');document.execCommand(c,false,v);ed.oninput()}});
+const cv=$('#cv'),x=cv.getContext('2d');let col='#ffffff',dr=false;x.lineCap=x.lineJoin='round';
+const d0=date;LP.files.get('ink-'+d0).then(b=>{if(b){const i=new Image();i.onload=()=>x.drawImage(i,0,0);i.src=URL.createObjectURL(b)}});
+const pt=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]};
+cv.onpointerdown=e=>{dr=true;cv.setPointerCapture(e.pointerId);const[a,b]=pt(e);x.beginPath();x.moveTo(a,b);x.globalCompositeOperation=col==='er'?'destination-out':'source-over';x.strokeStyle=col;x.lineWidth=col==='er'?24:3;x.lineTo(a+.1,b);x.stroke()};
+cv.onpointermove=e=>{if(!dr)return;const[a,b]=pt(e);x.lineTo(a,b);x.stroke()};
+cv.onpointerup=()=>{if(!dr)return;dr=false;cv.toBlob(b=>LP.files.put('ink-'+d0,b))};
+document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>col=b.dataset.p);
+$('#cl').onclick=()=>{x.clearRect(0,0,cv.width,cv.height);LP.files.del('ink-'+d0)};
+async function recs(){const ks=await LP.files.keys('rec-'+d0+'-');$('#rl').innerHTML='';for(const k of ks){const b=await LP.files.get(k),w=document.createElement('div');w.className='item';w.innerHTML=`<span>🕒 ${new Date(+k.split('-').pop()).toLocaleTimeString('ar-EG')}</span><audio controls src="${URL.createObjectURL(b)}"></audio><button class="btn g">✕</button>`;w.querySelector('button').onclick=async()=>{await LP.files.del(k);recs()};$('#rl').append(w)}}
+recs();let mr,ch;
+$('#rec').onclick=async()=>{if(mr&&mr.state==='recording'){mr.stop();return}try{const s=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(s);ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.onstop=async()=>{s.getTracks().forEach(t=>t.stop());await LP.files.put('rec-'+d0+'-'+Date.now(),new Blob(ch,{type:mr.mimeType}));$('#rec').textContent='🎙 ابدأ تسجيل';recs()};mr.start();$('#rec').textContent='⏹ إيقاف وحفظ'}catch(e){alert('محتاج تسمح للمتصفح باستخدام الميكروفون')}};
+}
+view()});
+</script></body></html>
