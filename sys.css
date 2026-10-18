@@ -61,3 +61,15 @@ a.card{display:block}a.card:hover{border-color:var(--a)}
 #cv{display:block;max-width:calc(100vw - 34px);max-height:calc(100dvh - 135px);width:auto;height:auto}
 .dm summary{cursor:pointer;font-weight:700}
 body.fs .bar{display:none}body.fs .dtools{top:0}body.fs main{padding:0 8px}body.fs #cv{max-width:calc(100vw - 18px);max-height:calc(100dvh - 62px)}body.fs .dm{display:none}
+/* v4: fixed top bar + full-page drawing with scrolling pages */
+.bar{position:fixed;top:0;left:0;right:0;height:52px;box-sizing:border-box}
+body.u{padding-top:52px}body.fs.u{padding-top:0}
+.dpage{position:fixed;top:52px;bottom:0;left:0;right:0;display:flex;flex-direction:column;background:var(--bg);z-index:1}
+.dpage .dtools{position:static;flex:none;border-bottom:1px solid var(--l);padding:8px 10px}
+.scroller{flex:1;overflow-y:scroll;overflow-x:hidden;padding:10px 10px 70px;-webkit-overflow-scrolling:touch;background:#0b0f1d}
+.scroller::-webkit-scrollbar{width:16px}.scroller::-webkit-scrollbar-track{background:var(--c)}.scroller::-webkit-scrollbar-thumb{background:var(--a);border-radius:8px;border:3px solid var(--c)}
+.scroller .paper{position:relative;max-width:900px;margin:0 auto 14px}
+.scroller canvas{display:block;width:100%;height:auto;max-width:none;max-height:none}
+.pn{position:absolute;left:8px;top:2px;opacity:.5;font-size:12px;color:#888;pointer-events:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:75dvh;overflow:auto;background:var(--c);border-top:1px solid var(--l);border-radius:18px 18px 0 0;padding:16px;z-index:35;transform:translateY(105%);transition:transform .25s}.sheet.o{transform:none}
+body.fs .dpage{top:0}
