@@ -49,3 +49,15 @@ small,.m{color:var(--m)}img{max-width:100%}
 #cv{display:block;width:100%;aspect-ratio:1.6;cursor:crosshair;background:transparent;border:0;border-radius:0}
 .sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--l);padding:0;cursor:pointer}.sw.on{border-color:var(--b);transform:scale(1.2)}
 a.card{display:block}a.card:hover{border-color:var(--a)}
+
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 14px;background:#0f1424f2;backdrop-filter:blur(8px);border-bottom:1px solid var(--l)}
+.bar .sp{flex:1}.bar .brand,.bar button{padding:4px 14px;border-radius:99px;background:var(--c);border:1px solid var(--l);color:var(--t);font:inherit;font-size:14px;cursor:pointer}
+.bar .brand{font-family:Cairo,sans-serif;font-weight:800;border-color:var(--a)}#mn{font-size:20px;padding:0 13px;line-height:1.7}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(280px,82vw);z-index:40;background:var(--c);border-right:1px solid var(--l);padding:16px;transform:translateX(-105%);transition:transform .25s;display:flex;flex-direction:column;gap:8px;overflow:auto}.drawer.o{transform:none}
+.drawer a,.drawer button{display:block;text-align:right;padding:10px 14px;border-radius:12px;background:var(--c2);border:1px solid var(--l);color:var(--t);font:inherit;cursor:pointer}.drawer a.on{background:var(--a);color:#07201c;font-weight:700;border-color:var(--a)}
+.veil{position:fixed;inset:0;background:#000a;z-index:30;display:none}.veil.o{display:block}
+.dtools{display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 2px;position:sticky;top:52px;z-index:10;background:var(--bg)}.dtools>*{flex:none}.dtools .btn{padding:6px 12px}
+.stage{display:flex;justify-content:center}.stage .paper{width:fit-content}
+#cv{display:block;max-width:calc(100vw - 34px);max-height:calc(100dvh - 135px);width:auto;height:auto}
+.dm summary{cursor:pointer;font-weight:700}
+body.fs .bar{display:none}body.fs .dtools{top:0}body.fs main{padding:0 8px}body.fs #cv{max-width:calc(100vw - 18px);max-height:calc(100dvh - 62px)}body.fs .dm{display:none}
